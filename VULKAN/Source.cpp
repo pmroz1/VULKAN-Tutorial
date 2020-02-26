@@ -12,7 +12,7 @@
 
 //TEST Branch
 
-const int WIDTH = 800;
+const int WIDTH = 900;
 const int HEIGHT = 600;
 
 const std::vector<const char*> validationLayers = {
