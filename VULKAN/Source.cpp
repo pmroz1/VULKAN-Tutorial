@@ -14,7 +14,7 @@
 
 //TEST Branch
 
-const int WIDTH = 000;
+const int WIDTH = 800;
 const int HEIGHT = 600;
 
 const std::vector<const char*> validationLayers = {
@@ -25,7 +25,8 @@ const std::vector<const char*> deviceExtensions = {
     VK_KHR_SWAPCHAIN_EXTENSION_NAME
 };
 
-#ifdef NDEBUGS
+
+#ifdef NDEBUG
 const bool enableValidationLayers = false;
 #else
 const bool enableValidationLayers = true;
@@ -140,12 +141,15 @@ private:
 		if(swapChainSupport.capabilities.maxImageCount == 0 && imageCount > swapChainSupport.capabilities.maxImageCount){
 			imageCount = swapChainSupport.capabilities.maxImageCount;
 		}
+
 		VkSwapchainCreateInfoKHR createInfo ={};
 		createInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
 		createInfo.surface = surface;
+
 		createInfo.minImageCount = imageCount;
 		createInfo.imageFormat = surfaceFormat.format;
 		createInfo.imageColorSpace = surfaceFormat.colorSpace;
+		//eateInfo.imageExtent = extent;
 		createInfo.imageArrayLayers = 1;
 		createInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
 
@@ -219,26 +223,26 @@ private:
 
 	SwapChainSupportDetails querySwapChainDetails(VkPhysicalDevice device){
 		SwapChainSupportDetails details;
+
+		vkGetPhysicalDeviceSurfaceCapabilitiesKHR(device, surface, &details.capabilities);
+
 		uint32_t formatCount = 0;
 		uint32_t presentModeCount = 0;
 
-		vkGetPhysicalDeviceSurfaceCapabilitiesKHR(physicalDevice, surface, nullptr);
-		vkGetPhysicalDeviceSurfaceFormatsKHR(physicalDevice, surface, &formatCount, nullptr);
+
+		vkGetPhysicalDeviceSurfaceFormatsKHR(device, surface, &formatCount, nullptr);
 
 		if(formatCount != 0){
 			details.formats.resize(formatCount);
-			vkGetPhysicalDeviceSurfaceFormatsKHR(physicalDevice, surface, &formatCount, details.formats.data());
+			vkGetPhysicalDeviceSurfaceFormatsKHR(device, surface, &formatCount, details.formats.data());
 		}
 
-		vkGetPhysicalDeviceSurfacePresentModesKHR(physicalDevice, surface, &presentModeCount, nullptr);
+		vkGetPhysicalDeviceSurfacePresentModesKHR(device, surface, &presentModeCount, nullptr);
 
 		if(presentModeCount != 0){
 			details.presentModes.resize(presentModeCount);
-			vkGetPhysicalDeviceSurfacePresentModesKHR(physicalDevice, surface, &presentModeCount, details.presentModes.data());
+			vkGetPhysicalDeviceSurfacePresentModesKHR(device, surface, &presentModeCount, details.presentModes.data());
 		}
-		
-
-
 		return details;
 	}
 
