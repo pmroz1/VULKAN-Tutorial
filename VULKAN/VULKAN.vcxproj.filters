@@ -24,4 +24,12 @@
       <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="shaders\vert.spv">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="shaders\frag.spv">
+      <Filter>Source Files</Filter>
+    </None>
+  </ItemGroup>
 </Project>
